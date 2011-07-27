@@ -46,6 +46,52 @@ public class Activity2 extends android.app.Activity
 
       } /*ShortcutIntent*/
 
+    private ShortcutIntent[] DefineShortcuts()
+      /* builds the list of shortcuts I know how to define. */
+      {
+        final java.util.ArrayList<ShortcutIntent> Shortcuts =
+            new java.util.ArrayList<ShortcutIntent>();
+        for
+          (
+            String[] Entry : new String[][]
+                {
+                    {"Say “Aah”", "Aah"},
+                    {"Say “Isn’t This Wonderful?”", "Isn’t This Wonderful?"},
+                    {"Say nothing", null},
+                }
+          )
+          {
+            final String Label = Entry[0];
+            final String ExtraMessage = Entry[1];
+            final Intent DoWhat = new Intent(Intent.ACTION_MAIN);
+            DoWhat.setClass(Activity2.this, Activity3.class);
+            if (ExtraMessage != null)
+              {
+                DoWhat.putExtra(Activity3.MessageID, ExtraMessage);
+              } /*if*/
+            Shortcuts.add(new ShortcutIntent(Label, DoWhat));
+          } /*for*/
+        Shortcuts.add
+          /* just for fun, a shortcut that doesn't even point to any
+            of my activities, to show it can be done */
+          (
+            new ShortcutIntent
+              (
+                "Find Lawrence On GitHub",
+                new Intent
+                  (
+                    Intent.ACTION_VIEW,
+                    new android.net.Uri.Builder()
+                        .scheme("https")
+                        .encodedPath("//github.com/ldo")
+                        .build()
+                  )
+              )
+          );
+        return
+            Shortcuts.toArray(new ShortcutIntent[Shortcuts.size()]);
+      } /*DefineShortcuts*/
+
     @Override
     public void onCreate
       (
@@ -76,46 +122,7 @@ public class Activity2 extends android.app.Activity
                 Caption.setText("Shortcuts to add:");
                 MainLayout.addView(Caption, ButtonLayout);
               }
-            final java.util.ArrayList<ShortcutIntent> Shortcuts =
-                new java.util.ArrayList<ShortcutIntent>();
-            for
-              (
-                String[] Entry : new String[][]
-                    {
-                        {"Say “Aah”", "Aah"},
-                        {"Say “Isn’t This Wonderful?”", "Isn’t This Wonderful?"},
-                        {"Say nothing", null},
-                    }
-              )
-              {
-                final String Label = Entry[0];
-                final String ExtraMessage = Entry[1];
-                final Intent DoWhat = new Intent(Intent.ACTION_MAIN);
-                DoWhat.setClass(Activity2.this, Activity3.class);
-                if (ExtraMessage != null)
-                  {
-                    DoWhat.putExtra(Activity3.MessageID, ExtraMessage);
-                  } /*if*/
-                Shortcuts.add(new ShortcutIntent(Label, DoWhat));
-              } /*for*/
-            Shortcuts.add
-              /* just for fun, a shortcut that doesn't even point to any
-                of my activities, to show it can be done */
-              (
-                new ShortcutIntent
-                  (
-                    "Find Lawrence On GitHub",
-                    new Intent
-                      (
-                        Intent.ACTION_VIEW,
-                        new android.net.Uri.Builder()
-                            .scheme("https")
-                            .encodedPath("//github.com/ldo")
-                            .build()
-                      )
-                  )
-              );
-            for (ShortcutIntent Entry : Shortcuts)
+            for (ShortcutIntent Entry : DefineShortcuts())
               {
                 final android.widget.Button CreateShortcut = new android.widget.Button(this);
                 final String Label = Entry.Label;
@@ -157,6 +164,38 @@ public class Activity2 extends android.app.Activity
                   );
                 MainLayout.addView(CreateShortcut, ButtonLayout);
               } /*for*/
+              {
+                final android.widget.Button DeleteShortcuts = new android.widget.Button(this);
+                DeleteShortcuts.setText("Delete All My Shortcuts");
+                DeleteShortcuts.setOnClickListener
+                  (
+                    new android.view.View.OnClickListener()
+                      {
+                        @Override
+                        public void onClick
+                          (
+                            android.view.View TheView
+                          )
+                          {
+                            for (ShortcutIntent Entry : DefineShortcuts())
+                              {
+                                Activity2.this.sendBroadcast
+                                  (
+                                    new Intent
+                                      (
+                                        "com.android.launcher.action.UNINSTALL_SHORTCUT"
+                                          /* no symbolic name for this in official APIs */
+                                      )
+                                        .putExtra(Intent.EXTRA_SHORTCUT_NAME, Entry.Label)
+                                        .putExtra(Intent.EXTRA_SHORTCUT_INTENT, Entry.DoWhat)
+                                  );
+                              } /*for*/
+                            Activity2.this.finish();
+                          } /*onClick*/
+                      } /*OnClickListener*/
+                  );
+                MainLayout.addView(DeleteShortcuts, ButtonLayout);
+              }
           }
         else
           {

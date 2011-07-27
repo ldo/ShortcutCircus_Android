@@ -10,6 +10,11 @@
             note this is not mentioned in the official list of permissions
             at <http://developer.android.com/reference/android/Manifest.permission.html>.
         -->
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+        <!--
+            needed to send UNINSTALL_SHORTCUT intents to the launcher;
+            also undocumented.
+        -->
     <application
         android:label="@string/activity_name_1"
         android:icon="@drawable/icon"
