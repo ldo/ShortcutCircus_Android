@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="nz.gen.geek_central.ShortcutCircus"
+    android:versionCode="1"
+    android:versionName="1.0"
+>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+        <!--
+            needed to send INSTALL_SHORTCUT intents to the launcher;
+            note this is not mentioned in the official list of permissions
+            at <http://developer.android.com/reference/android/Manifest.permission.html>.
+        -->
+    <application
+        android:label="@string/activity_name_1"
+        android:icon="@drawable/icon"
+    >
+        <activity
+            android:name="Activity1"
+            android:label="@string/activity_name_1"
+        >
+            <intent-filter>
+                <!--
+                    Usual action and category for activity to show up
+                    in list of installed apps.
+                -->
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="Activity2"
+            android:label="@string/activity_name_2"
+        >
+            <intent-filter>
+                <!--
+                    Specifying the following action and category allows the
+                    launcher to invoke this activity to create home-screen
+                    shortcuts.
+                -->
+                <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <!--
+                    Usual action and category for activity to show up
+                    in list of installed apps.
+                -->
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="Activity3"
+            android:label="@string/activity_name_3"
+            android:exported="true"
+        >
+            <!--
+                This activity has no intent filters, so it is not accessible
+                from the launcher. Or is it?
+            -->
+        </activity>
+    </application>
+</manifest> 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_name_1">Shortcut Circus</string>
+    <string name="activity_name_2">Not Shortcut Circus</string>
+    <string name="activity_name_3">Not Even Shortcut Circus</string>
+</resources>
