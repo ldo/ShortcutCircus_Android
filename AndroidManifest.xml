@@ -44,6 +44,12 @@
                 <!--
                     Usual action and category for activity to show up
                     in list of installed apps.
+
+                    Interesting launcher caching bug: reinstalling
+                    the app after adding this intent-filter would not
+                    get this second activity to appear in the launcher's
+                    list of apps. I had to uninstall the app and then
+                    reinstall before it would work.
                 -->
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
