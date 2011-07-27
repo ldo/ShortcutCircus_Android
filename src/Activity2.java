@@ -29,6 +29,23 @@ import android.content.Intent;
 public class Activity2 extends android.app.Activity
   {
 
+    private class ShortcutIntent
+      {
+        public final String Label;
+        public final Intent DoWhat;
+
+        public ShortcutIntent
+          (
+            String Label,
+            Intent DoWhat
+          )
+          {
+            this.Label = Label;
+            this.DoWhat = DoWhat;
+          } /*ShortcutIntent*/
+
+      } /*ShortcutIntent*/
+
     @Override
     public void onCreate
       (
@@ -54,18 +71,55 @@ public class Activity2 extends android.app.Activity
                     android.view.ViewGroup.LayoutParams.FILL_PARENT,
                     android.view.ViewGroup.LayoutParams.WRAP_CONTENT
                   );
+              {
+                final android.widget.TextView Caption = new android.widget.TextView(this);
+                Caption.setText("Shortcuts to add:");
+                MainLayout.addView(Caption, ButtonLayout);
+              }
+            final java.util.ArrayList<ShortcutIntent> Shortcuts =
+                new java.util.ArrayList<ShortcutIntent>();
             for
               (
                 String[] Entry : new String[][]
                     {
                         {"Say “Aah”", "Aah"},
+                        {"Say “Isn’t This Wonderful?”", "Isn’t This Wonderful?"},
                         {"Say nothing", null},
                     }
               )
               {
-                final android.widget.Button CreateShortcut = new android.widget.Button(this);
                 final String Label = Entry[0];
                 final String ExtraMessage = Entry[1];
+                final Intent DoWhat = new Intent(Intent.ACTION_MAIN);
+                DoWhat.setClass(Activity2.this, Activity3.class);
+                if (ExtraMessage != null)
+                  {
+                    DoWhat.putExtra(Activity3.MessageID, ExtraMessage);
+                  } /*if*/
+                Shortcuts.add(new ShortcutIntent(Label, DoWhat));
+              } /*for*/
+            Shortcuts.add
+              /* just for fun, a shortcut that doesn't even point to any
+                of my activities, to show it can be done */
+              (
+                new ShortcutIntent
+                  (
+                    "Find Lawrence On GitHub",
+                    new Intent
+                      (
+                        Intent.ACTION_VIEW,
+                        new android.net.Uri.Builder()
+                            .scheme("https")
+                            .encodedPath("//github.com/ldo")
+                            .build()
+                      )
+                  )
+              );
+            for (ShortcutIntent Entry : Shortcuts)
+              {
+                final android.widget.Button CreateShortcut = new android.widget.Button(this);
+                final String Label = Entry.Label;
+                final Intent ShortcutIntent = Entry.DoWhat;
                 CreateShortcut.setText(Label);
                 CreateShortcut.setOnClickListener
                   (
@@ -77,12 +131,6 @@ public class Activity2 extends android.app.Activity
                             android.view.View TheView
                           )
                           {
-                            final Intent ShortcutIntent = new Intent(Intent.ACTION_MAIN);
-                            ShortcutIntent.setClass(Activity2.this, Activity3.class);
-                            if (ExtraMessage != null)
-                              {
-                                ShortcutIntent.putExtra(Activity3.MessageID, ExtraMessage);
-                              } /*if*/
                             Activity2.this.sendBroadcast
                               (
                                 new Intent
