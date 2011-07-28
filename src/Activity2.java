@@ -9,6 +9,26 @@ package nz.gen.geek_central.ShortcutCircus;
     which function to perform based on the intent that was passed to
     it at launch time.
 
+    Theory of operation: the official docs are a bit thin, but useful
+    details can be gleaned from the Android sources. The standard Launcher
+    is here
+    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=tree;f=src/com/android/launcher;hb=HEAD>.
+    There is also a “Launcher2”, here
+    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher2.git;a=tree;f=src/com/android/launcher2;hb=HEAD>,
+    but I’ll concentrate on the simpler one for now. Looking at the
+    manifest
+    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=AndroidManifest.xml;hb=HEAD>,
+    you can see broadcast receivers which accept intents with actions
+    “com.android.launcher.action.INSTALL_SHORTCUT” and
+    “com.android.launcher.action.UNINSTALL_SHORTCUT”, controlled
+    by associated permissions. The corresponding receiver classes are
+    InstallShortcutReceiver
+    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=src/com/android/launcher/InstallShortcutReceiver.java;hb=HEAD>
+    and UninstallShortcutReceiver
+    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=src/com/android/launcher/UninstallShortcutReceiver.java;hb=HEAD>.
+    From these, you can see how the intent parameters are actually
+    processed.
+
     Copyright 2011 by Lawrence D'Oliveiro <ldo@geek-central.gen.nz>.
 
     Licensed under the Apache License, Version 2.0 (the "License"); you
@@ -28,6 +48,9 @@ import android.content.Intent;
 
 public class Activity2 extends android.app.Activity
   {
+    private static final String EXTRA_SHORTCUT_DUPLICATE = "duplicate";
+      /* boolean for telling launcher whether to allow/remove duplicates or not;
+        if omitted, default is true. */
 
     private class ShortcutIntent
       {
@@ -61,10 +84,11 @@ public class Activity2 extends android.app.Activity
                 }
           )
           {
+          /* intents that launch Activity3 to display different message strings */
             final String Label = Entry[0];
             final String ExtraMessage = Entry[1];
             final Intent DoWhat = new Intent(Intent.ACTION_MAIN);
-            DoWhat.setClass(Activity2.this, Activity3.class);
+            DoWhat.setClass(this, Activity3.class);
             if (ExtraMessage != null)
               {
                 DoWhat.putExtra(Activity3.MessageID, ExtraMessage);
@@ -147,6 +171,7 @@ public class Activity2 extends android.app.Activity
                                   )
                                     .putExtra(Intent.EXTRA_SHORTCUT_NAME, Label)
                                     .putExtra(Intent.EXTRA_SHORTCUT_INTENT, ShortcutIntent)
+                                  /* icon is optional, launcher will provide a default if omitted */
                                     .putExtra
                                       (
                                         Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
@@ -158,6 +183,9 @@ public class Activity2 extends android.app.Activity
                                       )
                                       /* or Intent.EXTRA_SHORTCUT_ICON and pass a Bitmap */
                               );
+                              /* if EXTRA_SHORTCUT_DUPLICATE is passed/defaulted to true
+                                here, launcher will create the shortcut even if a duplicate
+                                already exists */
                             Activity2.this.finish();
                           } /*onClick*/
                       } /*OnClickListener*/
@@ -189,6 +217,9 @@ public class Activity2 extends android.app.Activity
                                         .putExtra(Intent.EXTRA_SHORTCUT_NAME, Entry.Label)
                                         .putExtra(Intent.EXTRA_SHORTCUT_INTENT, Entry.DoWhat)
                                   );
+                                  /* if EXTRA_SHORTCUT_DUPLICATE is passed/defaulted to true
+                                    here, launcher will remove all matches, otherwise only
+                                    first match */
                               } /*for*/
                             Activity2.this.finish();
                           } /*onClick*/

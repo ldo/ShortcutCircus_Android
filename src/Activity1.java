@@ -5,6 +5,10 @@ package nz.gen.geek_central.ShortcutCircus;
     ShortcutCircus -- demonstration of all the ways I know of to use
     (and abuse) Android shortcuts.
 
+    This particular activity doesn't do much, it's just to demonstrate
+    that you can have more than one app icon appear in the launcher
+    from a single installed package.
+
     Copyright 2011 by Lawrence D'Oliveiro <ldo@geek-central.gen.nz>.
 
     Licensed under the Apache License, Version 2.0 (the "License"); you
