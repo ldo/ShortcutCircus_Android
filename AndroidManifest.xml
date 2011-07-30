@@ -22,6 +22,12 @@
         android:label="@string/activity_name_1"
         android:icon="@drawable/icon"
     >
+    <!--
+        application label vs activity label: it is the activity label,
+        not the application label, that shows up in the launcher. The
+        application label appears in the list of installed applications
+        in your Settings.
+    -->
         <activity
             android:name="Activity1"
             android:label="@string/activity_name_1"
