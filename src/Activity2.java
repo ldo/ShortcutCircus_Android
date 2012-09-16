@@ -12,20 +12,17 @@ package nz.gen.geek_central.ShortcutCircus;
     Theory of operation: the official docs are a bit thin, but useful
     details can be gleaned from the Android sources. The standard Launcher
     is here
-    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=tree;f=src/com/android/launcher;hb=HEAD>.
-    There is also a “Launcher2”, here
-    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher2.git;a=tree;f=src/com/android/launcher2;hb=HEAD>,
-    but I’ll concentrate on the simpler one for now. Looking at the
-    manifest
-    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=AndroidManifest.xml;hb=HEAD>,
+    <https://github.com/android/platform_packages_apps_launcher/tree/master/src/com/android/launcher>.
+    Looking at the manifest
+    <https://github.com/android/platform_packages_apps_launcher/blob/master/AndroidManifest.xml>,
     you can see broadcast receivers which accept intents with actions
     “com.android.launcher.action.INSTALL_SHORTCUT” and
     “com.android.launcher.action.UNINSTALL_SHORTCUT”, controlled
     by associated permissions. The corresponding receiver classes are
     InstallShortcutReceiver
-    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=src/com/android/launcher/InstallShortcutReceiver.java;hb=HEAD>
+    <https://github.com/android/platform_packages_apps_launcher/blob/master/src/com/android/launcher/InstallShortcutReceiver.java>
     and UninstallShortcutReceiver
-    <http://android.git.kernel.org/?p=platform/packages/apps/Launcher.git;a=blob;f=src/com/android/launcher/UninstallShortcutReceiver.java;hb=HEAD>.
+    <https://github.com/android/platform_packages_apps_launcher/blob/master/src/com/android/launcher/UninstallShortcutReceiver.java>.
     From these, you can see how the intent parameters are actually
     processed.
 
